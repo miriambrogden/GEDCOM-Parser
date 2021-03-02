@@ -1,0 +1,411 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Genealogy App</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Parse GEDCOM files to retrieve information about your genaology">
+		<meta name="keywords" content="GEDCOM, genology, app, family, individual">
+		<meta name="author" content="Miriam Snow">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<!-- BOOTSTRAP -->
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+		<script src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+		<!-- my stuff -->
+		<script src="index.js"></script>
+		<link rel="stylesheet" href="style.css">
+		<link rel="shortcut icon" href="http://miriamsnow.com/logo1">
+		
+	</head>
+	
+	<body>
+		<div class="theCont">
+		<img align="right" class="appImg" src="http://miriamsnow.com/logo1"></img>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		
+		<!--STATUS PANEL-->
+		<h3>Status Panel</h3>
+		<div id="status" class="status center">
+			<hr>
+		</div>
+		<button style="float: right;"  type="button" class="inputText" id="clearStatus">Clear</button>
+		<br>
+		
+		<!-- DATABASE STUFF -->
+		<h3>Database</h3>
+		<hr>
+
+		<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal">
+		  Connect to Database
+		</button>
+		<div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Connect to Database</h5>
+			  </div>
+			  <div class="modal-body">
+				  <input type="text" id="username" placeholder="Username"></input><br>
+				  <input type="text" id="password" placeholder="Password"></input><br>
+				  <input type="text" id="dbname" placeholder="Database Name"></input>
+			  </div>
+			  <div class="modal-footer">
+				<button data-dismiss="modal" type="button" id="connectButt" class="inputText">Connect</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<br><br>
+		
+		<button type="button" disabled class="btn btn-success" id="store">Store All Files</button>&nbsp;&nbsp;
+		<button type="button" disabled class="btn btn-success" id="clearAll">Clear All Data</button>&nbsp;&nbsp;
+		<button type="button" disabled class="btn btn-success" onclick="displayDB()" id="displayDB">Display DB Status</button>
+		<br><br>
+		<h3>Query</h3><hr>
+		
+		<form id="queryOptions">
+			<div id="a" class="greyBoarder">
+			<input type="radio"  name="ExQue" checked id="dispAllIndi">&nbsp;&nbsp;Display all individuals sorted by last name&nbsp;&nbsp;</input><br>
+			</div><br>
+			<div id="b">
+			<input type="radio" name="ExQue" id="dispFileIndi" >&nbsp;&nbsp;Display all individuals from specified file:&nbsp;&nbsp;</input>
+			<input type="text" class="inputText" id="queryFileName" placeholder="Insert file name here"><br>
+			</div><br>
+			<div id="c">
+			<input type="radio"  name="ExQue" id="dispSurnameIndi">&nbsp;&nbsp;Display all individuals with specified surname:</input>&nbsp;&nbsp;
+			<input type="text" class="inputText" id="querySurName" placeholder="Insert surname here"><br>
+			</div><br>
+			<div id="d">
+			<input type="radio"  name="ExQue" id="dispFamSize">&nbsp;&nbsp;Display all individuals that have a family size within specified range:&nbsp;&nbsp;</input>
+			<input type="number" id="querymin" class="inputText" value="0" onkeypress="return false" min="0" max="150" placeholder="Minimum family size">&nbsp;&nbsp;
+			<input type="number" value="0" min="0" max="150" id="querymax" class="inputText" onkeypress="return false" placeholder="Maximum family size">&nbsp;&nbsp;<br>
+			</div>
+			<br>
+			<div id="e">
+			<input type="radio"  name="ExQue" id="dispFileName">&nbsp;&nbsp;Display all files that contain a specific individual: &nbsp;&nbsp;</input>
+			<input type="text" class="inputText" id="queryTheFirstName" placeholder="Insert given name here">&nbsp;&nbsp;
+			<input type="text" class="inputText" id="queryTheLastName" placeholder="Insert surname here">&nbsp;&nbsp;<br>
+			</div>
+			<br>
+			<div id="f">
+			<input type="radio"  name="ExQue" id="customQue">&nbsp;&nbsp;</input>
+			<input type="text" id="CustomQueryText" class="inputText" style="width: 400px" value="SELECT "></input>&nbsp;&nbsp;
+			</div>
+		</form>
+		<br><br>		
+		<button class="inputText" disabled id="subQueButt" type="button">Execute Query</button>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		Help&nbsp;&nbsp;<button type="button" id="helpMe" data-toggle="modal" data-target="#themodal" class="btn btn-outline-secondary"><i class="fas fa-question-circle fa-lg"></i></i></button>
+			
+		<br><br>
+		<h3>Results</h3><hr>
+		<div id="results" class="file">
+		<table id="resultsTable" class="table table-striped">
+			<thead id="resHead"></thead>
+			<tbody id="resBody"></tbody>
+		</table>
+		</div>
+		<br>
+		
+		<div class="modal fade bd-example-modal-lg" id="themodal" tabindex="-1" role="dialog" aria-labelledby="themodal" aria-hidden="true">
+			  <div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Description of FILE table:</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					  <span aria-hidden="true">&times;</span>
+					</button>
+				  </div>
+				  <div class="modal-body">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+							<th scope="col">Field</th>
+							<th scope="col">Type</th>
+							<th scope="col">Null</th>
+							<th scope="col">Key</th>
+							<th scope="col">Default</th>
+							<th scope="col">Extra</th>
+							</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<th scope="col">file_id</th>
+							<th scope="col">int(11)</th>
+							<th scope="col">NO</th>
+							<th scope="col">PRI</th>
+							<th scope="col">NULL</th>
+							<th scope="col">auto_increment</th>
+						</tr>
+						<tr>
+							<th scope="col">file_Name</th>
+							<th scope="col">varchar(60)</th>
+							<th scope="col">NO</th>
+							<th scope="col"></th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						<tr>
+							<th scope="col">source</th>
+							<th scope="col">varchar(250)</th>
+							<th scope="col">NO</th>
+							<th scope="col"></th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						<tr>
+							<th scope="col">version</th>
+							<th scope="col">varchar(10)</th>
+							<th scope="col">NO</th>
+							<th scope="col"></th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						<tr>
+							<th scope="col">encoding</th>
+							<th scope="col">varchar(10)</th>
+							<th scope="col">NO</th>
+							<th scope="col"></th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						<tr>
+							<th scope="col">sub_name</th>
+							<th scope="col">varchar(62)</th>
+							<th scope="col">NO</th>
+							<th scope="col"></th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						<tr>
+							<th scope="col">sub_addr</th>
+							<th scope="col">varchar(256)</th>
+							<th scope="col">YES</th>
+							<th scope="col"></th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						<tr>
+							<th scope="col">num_individials</th>
+							<th scope="col">int(11)</th>
+							<th scope="col">YES</th>
+							<th scope="col"></th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						<tr>
+							<th scope="col">num_families</th>
+							<th scope="col">int(11)</th>
+							<th scope="col">YES</th>
+							<th scope="col"></th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						</tbody>
+					</table>
+				 </div>
+				 <div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Description of INDIVIDUAL table:</h5>
+				  </div>
+				  <div class="modal-body">
+					  <table class="table table-striped">
+						<thead>
+							<tr>
+							<th scope="col">Field</th>
+							<th scope="col">Type</th>
+							<th scope="col">Null</th>
+							<th scope="col">Key</th>
+							<th scope="col">Default</th>
+							<th scope="col">Extra</th>
+							</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<th scope="col">ind_id</th>
+							<th scope="col">int(11)</th>
+							<th scope="col">NO</th>
+							<th scope="col">PRI</th>
+							<th scope="col">NULL</th>
+							<th scope="col">auto_increment</th>
+						</tr>
+						<tr>
+							<th scope="col">surname</th>
+							<th scope="col">varchar(256)</th>
+							<th scope="col">NO</th>
+							<th scope="col"></th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						<tr>
+							<th scope="col">given_name</th>
+							<th scope="col">varchar(256)</th>
+							<th scope="col">NO</th>
+							<th scope="col"></th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						<tr>
+							<th scope="col">sex</th>
+							<th scope="col">varchar(1)</th>
+							<th scope="col">YES</th>
+							<th scope="col"></th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						<tr>
+							<th scope="col">fam_size</th>
+							<th scope="col">int(11)</th>
+							<th scope="col">YES</th>
+							<th scope="col"></th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						<tr>
+							<th scope="col">source_file</th>
+							<th scope="col">int(11)</th>
+							<th scope="col">YES</th>
+							<th scope="col">MUL</th>
+							<th scope="col">NULL</th>
+							<th scope="col"></th>
+						</tr>
+						</tbody>
+					</table>
+				 </div>
+				  <div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">How to Write a Custom Query</h5>
+				  </div>
+				  <div class="modal-body">
+					<p>1. Start with a <strong>SELECT</strong> statement</p>
+					<p>2. Type <strong>*</strong> (an asterisk) if you wish to see everything from a table, otherwise specify a column you wish to see.<br>For example, <strong>surname</strong></p>
+					<p>3. Type <strong>FROM</strong> followed by the name of the table.<br>For example, <strong>FROM INDIVIDUAL</strong></p>
+					<p>4. If desired, add a condition to narrow down your results.<br>For example, <strong>WHERE sex = 'M'</strong></p>
+					<p>In this example, your entire custom query statement would be:<br><strong>SELECT surname FROM INDIVIDUAL WHERE sex = 'M'</strong></p>
+					<p>To view an entire table (in this case, INDIVIDUAL) type:<br><strong>SELECT * FROM INDIVIDUAL</strong></p>
+					<p>Your results will be displayed in the results panel below.</p>
+				  </div>
+				</div>
+			  </div>
+			</div>
+		<br><br>
+		<!-- COMMANDS -->
+		<h3>File Commands</h3>
+		<br><hr>
+		<div class="buttonGroup">
+			<button type="button" onclick="myUpload()" class="btn btn-outline-secondary">Upload File</button>
+			<button type="button" onclick="myCreate()" class="btn btn-outline-secondary">Create GEDCOM</button>
+			<button type="button" onclick="myAdd()" class="btn btn-outline-secondary">Add Individual</button>
+			<button type="button" onclick="myDescendents()" class="btn btn-outline-secondary">Get Descendents</button>
+			<button type="button" onclick="myAncestors()" class="btn btn-outline-secondary">Get Ancestors</button>
+			<br><br>
+		</div>
+			<div id="upload" style="display:none">
+				<form enctype="multipart/form-data" method="post" id="uploadForm">
+					<input type="file" name="uploadFile" id="uploadFile" accept=".ged"><br><br>
+					<button type="button" class="inputText" id="upFileSubmit" name="upFileSubmit">Upload File</button>
+				</form>
+			</div>
+			
+			<div id="create" style="display:none">
+				<form id="createGEDCOM" method="post">
+				<input required class="inputText" type="text" id="createFileName" required placeholder="File Name (.ged)"></input>
+				<input required class="inputText" type="text" id = "createSubName" required placeholder="Submitter Name"></input>
+				<input required class="inputText" type="text" id="createSubAdd" required placeholder="Submitter Address"></input><br><br>
+				<button type="button" id="createGButt" class="inputText">Create GEDCOM</input>
+				</form>
+			</div>
+			
+			<div id="add" style="display:none">
+				<form action="index.html" id="addIndividual" method="post">
+				<select id="fileSelectTwo"></select><br><br>
+				<input required class="inputText" id="addFirstName" type="text" placeholder="First Name"></input>
+				<input required class="inputText" id="addLastName" type="text" placeholder="Last Name"></input><br><br>
+				<button type="button" id="addIndButt" class="inputText">Add Individual</button>
+				</form>
+			</div>
+			
+			<div id="descendents" style="display:none">
+				<form action="index.html" id="getDescendents" method="post">
+				<select id="fileSelectThree">
+				</select><br><br>
+				<p>Maximum # of Generations to display:&nbsp;<input class="inputText" id="desMax" value="0" onkeypress="return false" type="number" min="0" max="150" placeholder="Choose Number"></input></p>
+				<input required class="inputText" id="desFirstName" type="text" placeholder="First Name"></input>
+				<input required class="inputText" id="desLastName" type="text" placeholder="Last Name"></input><br><br>
+				<button type="button" id="getDesSub" class="inputText">Get Descendents</button>
+				</form>
+				<div class="file">
+					<table id="myDesTable" class="table table-striped">
+						<thead id="desHead"></thead>
+						<tbody id="desBody"></tbody>
+					</table>
+				</div>
+			</div>
+			<div id="ancestors" style="display:none">
+				<form action="index.html" id="getAncestors" method="post">
+				<select id="fileSelectFour">
+				</select><br><br>
+				<p>Maximum # of Generations to display:&nbsp;<input class="inputText" id="ansMax" onkeypress="return false" value="0" min="0" max="150" type="number"></input></p>
+				<input required class="inputText" type="text" id="ansFirstName" placeholder="First Name"></input>
+				<input required class="inputText" type="text" id="ansLastName" placeholder="Last Name"></input><br><br>
+				<button type="button" id="getAnsSub" class="inputText">Get Ancestors</button>
+				</form>
+				<div class="file">
+					<table id="myAnsTable" class="table table-striped">
+						<thead id="ansHead"></thead>
+						<tbody id="ansBody"></tbody>
+					</table>
+				</div>
+			</div>
+			<br><br>
+			
+			<!-- FILE LOG PANEL -->
+		<h3>File Log Panel</h3>
+		<div class="file center">
+			<table class="table table-striped" id="myTable">
+				<thead>
+					<tr>
+					<th scope="col">File name<br>(click to download)</th>
+					<th scope="col">Source</th>
+					<th scope="col">GEDC Version</th>
+					<th scope="col">Encoding</th>
+					<th scope="col">Submitter<br>Name</th>
+					<th scope="col">Submitter<br>Address</th>
+					<th scope="col">Number of<br>Individuals</th>
+					<th scope="col">Number of<br>Families</th>
+					</tr>
+				</thead>
+				<tbody id="myBody"></tbody>
+			</table>
+		</div>
+		<br>
+		
+		<!-- VIEW PANEL -->
+		<br>
+		<h3>GEDCOM View Panel</h3>
+		<hr>
+			<form action="index.html" id="createGEDCOM" method="post">
+				<select onchange="getIndis()" id="fileSelectOne">
+				</select>
+			</form>
+			<div class="view">
+			<table style="text-align: center;" id="myTableTwo" class="table table-striped">
+				<thead>
+					<tr>
+					<th width="23%" scope="col">Given Name</th>
+					<th width="23%" scope="col">Surname</th>
+					<th width="23%" scope="col">Sex</th>
+					<th width="23%" scope="col">Family Size</th>
+					</tr>
+				</thead>
+				<tbody id="myBody2"></tbody>
+			</table>
+		</div>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		</div>
+		
+		
+	</body>
+</html>

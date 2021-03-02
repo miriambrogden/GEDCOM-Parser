@@ -1,0 +1,26 @@
+Name: Miriam Snow
+Date: March 30, 2018
+
+//*** Description of the Project ***//
+The purpose of this project is to create a web app to parse GEDCOM files, and store them on the server. 
+This web app also puts all the information about files and individuals into a database. 
+The user can then view, search and sift through the results presented on the web app regarding information about files and individuals. Users can select and provide custom queries to get results on desired information from the database. 
+This web app also relies on the backend functionality completed in assignments 1 and 2 to get information regarding descendents, ancestors or family size of an individual etc. 
+
+//*** Assumptions and Limitations ***//
+-The GEDCOM file being parsed, must adhere to the grammatical rules defined as the GEDCOM standard. 
+-The GEDCOM standard can be found here: https://edge.fscdn.org/assets/img/documents/ged551-86e5da89bae6ec7ba6f10e6794275d7e.pdf
+-Invalid files will not show up.
+-The GEDCOM file must also be a valid file and end in extension .ged
+-All table names and fields are exact as to what was specified in the Assignment 4 description, even if there was a spelling mistake.
+(i.e. num_individial and file_Name are the field names in FILE table)
+-A user must connect to the database before any database functionality is enabled
+
+//*** How to run the project ***//
+Once the files have been downloaded, follow the instructions below which will be entered on the command line when in the assign4 directory
+Type "cd parser" to descend into the parser directory
+Type "make" to create a dynamic library for the web app to use. 
+Type "cd ../" to go back to the main directory. 
+Type "npm install" to install node_modules
+Type "npm run dev <portkey>" to run the program 
+Visit the web app at http://localhost:<portkey>/
